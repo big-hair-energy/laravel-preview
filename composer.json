@@ -1,0 +1,29 @@
+{
+    "name": "big-hair-energy/laravel-preview",
+    "version": "dev-master",
+    "description": "Laravel middleware for website access during a preview mode.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Big Hair Energy",
+            "email": "engineering@bighairenergy.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.2.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "BigHairEnergy\\Preview\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BigHairEnergy\\Preview\\Tests\\": "tests/"
+        }
+    }
+}
