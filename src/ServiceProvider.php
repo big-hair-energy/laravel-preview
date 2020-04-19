@@ -74,6 +74,10 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             ], 'preview-migrations');
 
             $this->publishes([
+                __DIR__.'/../public' => public_path('vendor/preview'),
+            ], 'preview-assets');
+
+            $this->publishes([
                 __DIR__.'/../config/preview.php' => config_path('preview.php'),
             ], 'preview-config');
         }
