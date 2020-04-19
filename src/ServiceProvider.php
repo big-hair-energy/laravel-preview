@@ -45,6 +45,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         return [
             'namespace' => 'BigHairEnergy\Preview\Http\Controllers',
+            'middleware' => 'preview',
         ];
     }
 
@@ -89,36 +90,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             __DIR__.'/../config/preview.php', 'preview'
         );
 
-        $this->registerStorageDriver();
-
         $this->commands([
             Console\InstallCommand::class,
             Console\StatusCommand::class,
             Console\UsersCommand::class,
         ]);
-    }
-
-    /**
-     * Register the package storage driver.
-     *
-     * @return void
-     */
-    protected function registerStorageDriver()
-    {
-        $driver = config('preview.driver');
-
-        if (method_exists($this, $method = 'register'.ucfirst($driver).'Driver')) {
-            $this->$method();
-        }
-    }
-
-    /**
-     * Register the package database storage driver.
-     *
-     * @return void
-     */
-    protected function registerDatabaseDriver()
-    {
     }
 
     /**

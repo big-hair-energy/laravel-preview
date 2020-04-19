@@ -16,7 +16,9 @@ class Middleware
      */
     public function handle($request, Closure $next)
     {
-        if (!config('preview.enabled') || $request->path() === config('preview.path')) {
+        $path = $request->path();
+        $preview = config('preview.path');
+        if (!config('preview.enabled') || $path === $preview) {
             return $next($request);
         }
 
@@ -26,6 +28,6 @@ class Middleware
             $user->save();
             return $next($request);
         }
-        return redirect(config('preview.path'));
+        return redirect(route('bhe.preview', ['return' => $path]));
     }
 }
