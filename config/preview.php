@@ -58,4 +58,49 @@ return [
     'middleware' => [
         'web',
     ],
+
+    'mail' => [
+        'default' => env('PREVIEW_MAIL_MAILER', 'smtp'),
+        'mailers' => [
+            'smtp' => [
+                'transport' => 'smtp',
+                'host' => env('PREVIEW_MAIL_HOST', 'smtp.mailgun.org'),
+                'port' => env('PREVIEW_MAIL_PORT', 587),
+                'encryption' => env('PREVIEW_MAIL_ENCRYPTION', 'tls'),
+                'username' => env('PREVIEW_MAIL_USERNAME'),
+                'password' => env('PREVIEW_MAIL_PASSWORD'),
+                'timeout' => null,
+            ],
+
+            'ses' => [
+                'transport' => 'ses',
+            ],
+
+            'mailgun' => [
+                'transport' => 'mailgun',
+            ],
+
+            'postmark' => [
+                'transport' => 'postmark',
+            ],
+
+            'sendmail' => [
+                'transport' => 'sendmail',
+                'path' => '/usr/sbin/sendmail -bs',
+            ],
+
+            'log' => [
+                'transport' => 'log',
+                'channel' => env('MAIL_LOG_CHANNEL'),
+            ],
+
+            'array' => [
+                'transport' => 'array',
+            ],
+        ],
+        'from' => [
+            'address' => env('PREVIEW_MAIL_FROM_ADDRESS', 'hello@example.com'),
+            'name' => env('PREVIEW_MAIL_FROM_NAME', 'Example'),
+        ],
+    ],
 ];

@@ -96,6 +96,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         $this->commands([
             Console\InstallCommand::class,
+            Console\InviteCommand::class,
             Console\StatusCommand::class,
             Console\UsersCommand::class,
         ]);

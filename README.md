@@ -98,8 +98,12 @@ php artisan preview:users --create hurley@example.com
 
 ```
 php artisan preview:users --delete hurley@example.com
+```
 
-Output: User with email hurley@example.com was removed
+### Generate Secret Key for User
+
+```
+php artisan preview:users --secret hurley@example.com
 ```
 
 ### Send Email Invitations to All Users
