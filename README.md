@@ -68,30 +68,6 @@ php artisan preview:status
 Output: Preview mode is (dis|en)abled.
 ```
 
-### Preview User
-
-```
-php artisan preview:user hurley@example.com
-
-Output: User with email hurley@example.com has secret key e0199a5f-03c5-48bf-94d0-ab521aa123ac and last known IP address is 69.89.31.226
-```
-
-### Add Preview User
-
-```
-php artisan preview:user hurley@example.com
-
-Output: User with email hurley@example.com was added with the secret key e0199a5f-03c5-48bf-94d0-ab521aa123ac
-```
-
-### Remove Preview User
-
-```
-php artisan preview:user --delete hurley@example.com
-
-Output: User with email hurley@example.com was removed
-```
-
 ### List All Users
 
 ```
@@ -106,6 +82,26 @@ Output:
 +--------------------+--------------------------------------+---------------+
 ```
 
+### Show Preview User
+
+```
+php artisan preview:users hurley@example.com
+```
+
+### Add Preview User
+
+```
+php artisan preview:users --create hurley@example.com
+```
+
+### Remove Preview User
+
+```
+php artisan preview:users --delete hurley@example.com
+
+Output: User with email hurley@example.com was removed
+```
+
 ### Send Email Invitations to All Users
 
 This will generate secret keys and send invitations to all users in the table.
@@ -118,7 +114,7 @@ Output: Email invitations to preview example.com with secret keys have been sent
 
 ### Send Email Invitation to User
 
-This will generate a secret key and send an invitation to a user. If the user does not exist it will get created.
+This will generate a secret key and send an invitation to a user.
 
 ```
 php artisan preview:invite hurley@example.com

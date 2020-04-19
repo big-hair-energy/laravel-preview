@@ -1,0 +1,12 @@
+{
+  "name": "laravel-preview",
+  "version": "0.0.1",
+  "description": "Laravel middleware for website access during a preview mode.",
+  "main": "public/js/app.js",
+  "repository": "",
+  "author": "Big Hair Energy <engineering@bighairenergy.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "bootstrap": "^4.4.1"
+  }
+}

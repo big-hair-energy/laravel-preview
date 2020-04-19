@@ -43,9 +43,9 @@ class CreateBhePreviewUsersTable extends Migration
         Schema::create('bhe_preview_users', function (Blueprint $table) {
             $table->id();
             $table->string('email')->unique();
-            $table->ipAddress('ip_address');
-            $table->timestamp('last_previewed_at');
-            $table->softDeletes('deleted_at');
+            $table->ipAddress('ip_address')->nullable();
+            $table->timestamp('last_previewed_at')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

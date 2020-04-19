@@ -4,6 +4,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Preview Path
+    |--------------------------------------------------------------------------
+    |
+    | This is the URI path where users will be redirected for preview auth.
+    |
+    */
+
+    'path' => env('PREVIEW_PATH', 'preview'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Preview Storage Driver
     |--------------------------------------------------------------------------
     |
@@ -32,4 +43,19 @@ return [
     */
 
     'enabled' => env('PREVIEW_ENABLED', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Preview Route Middleware
+    |--------------------------------------------------------------------------
+    |
+    | These middleware will be assigned to the preview route, giving you
+    | the chance to add your own middleware to this list or change any of
+    | the existing middleware. Or, you can simply stick with this list.
+    |
+    */
+
+    'middleware' => [
+        'web',
+    ],
 ];

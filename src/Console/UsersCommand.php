@@ -5,6 +5,10 @@ namespace BigHairEnergy\Preview\Console;
 use BigHairEnergy\Preview\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
 
 class UsersCommand extends Command
 {
@@ -13,7 +17,11 @@ class UsersCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'preview:users {email?}';
+    protected $signature = 'preview:users
+                            {email? : The email of the user}
+                            {--create : Create this user}
+                            {--delete : Remove this user}
+                            {--secret : Generate a new secret key for this user}';
 
     /**
      * The console command description.
@@ -27,14 +35,7 @@ class UsersCommand extends Command
      *
      * @var array
      */
-    protected $headers = ['email', 'secret_key', 'ip_address', 'last_previewed'];
-
-    /**
-     * The columns to display when using the "compact" flag.
-     *
-     * @var array
-     */
-    protected $compactColumns = ['email', 'secret_key'];
+    protected $headers = ['email', 'secret_key', 'ip_address', 'last_previewed_at'];
 
     /**
      * Execute the console command.
@@ -43,85 +44,110 @@ class UsersCommand extends Command
      */
     public function handle()
     {
-        $users = User::all();
-        dd($users);
-        if ($users->isEmpty()) {
-            return $this->error('Your application doesn\'t have any preview users.');
+        // All users
+        if (!$this->argument('email')) {
+            return $this->getUsers();
         }
 
-        if ($this->option('json')) {
-            return $this->line(json_encode(array_values($users)));
+        // Create user
+        if ($this->option('create')) {
+            return $this->createUser();
         }
 
-        $this->table($this->getHeaders(), $users);
+        // Generate user secret
+        if ($this->option('secret')) {
+            return $this->generateUserSecret();
+        }
+
+        // Delete user
+        if ($this->option('delete')) {
+            return $this->deleteUser();
+        }
+
+        // Show User
+        $this->displayUser($this->getUser());
     }
 
-    /**
-     * Get the table headers for the visible columns.
-     *
-     * @return array
-     */
-    protected function getHeaders()
+    protected function displayUser(User $user)
     {
-        return Arr::only($this->headers, array_keys($this->getColumns()));
+        $this->displayUsers(collect([$user]));
     }
 
-    /**
-     * Get the column names to show (lowercase table headers).
-     *
-     * @return array
-     */
-    protected function getColumns()
+    protected function displayUsers(Collection $users)
     {
-        $availableColumns = array_map('strtolower', $this->headers);
-
-        if ($this->option('compact')) {
-            return array_intersect($availableColumns, $this->compactColumns);
-        }
-
-        if ($columns = $this->option('columns')) {
-            return array_intersect($availableColumns, $this->parseColumns($columns));
-        }
-
-        return $availableColumns;
+        $this->table($this->headers, $users->map(function ($user) {
+            return [
+                $user->email,
+                $user->secret_key,
+                $user->ip_address,
+                $user->last_previewed_at,
+            ];
+        })->toArray());
     }
 
-    /**
-     * Parse the column list.
-     *
-     * @param  array  $columns
-     * @return array
-     */
-    protected function parseColumns(array $columns)
+    protected function getUser()
     {
-        $results = [];
-
-        foreach ($columns as $i => $column) {
-            if (Str::contains($column, ',')) {
-                $results = array_merge($results, explode(',', $column));
-            } else {
-                $results[] = $column;
-            }
+        $email = $this->argument('email');
+        $user = User::where('email', $email)->first();
+        if (!$user) {
+            throw new InvalidArgumentException('Your application doesn\'t have any preview users associated with that email.');
         }
-
-        return $results;
+        return $user;
     }
 
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
+    protected function createUser()
     {
-        return [
-            ['columns', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'Columns to include in the preview users table'],
-            ['compact', 'c', InputOption::VALUE_NONE, 'Only show email and secret key columns'],
-            ['json', null, InputOption::VALUE_NONE, 'Output the user list as JSON'],
-            ['email', null, InputOption::VALUE_OPTIONAL, 'Filter the users by email'],
-            ['secret_key', null, InputOption::VALUE_OPTIONAL, 'Filter the users by secret key'],
-            ['reverse', 'r', InputOption::VALUE_NONE, 'Reverse the ordering of the users'],
-            ['sort', null, InputOption::VALUE_OPTIONAL, 'The column (email, secret_key, ip_address, last_previewed) to sort by', 'email'],
+        $email = $this->argument('email');
+        $params = [
+            'email' => $email,
         ];
+        $validator = Validator::make($params, [
+            'email' => 'required|email:rfc,dns',
+        ], [
+            'email.required' => 'No email was provided for creating a preview user.',
+        ]);
+
+        if ($validator->fails()) {
+            throw new InvalidArgumentException($validator->errors()->first());
+        }
+
+        $user = User::withTrashed()->where('email', $email)->first();
+
+        if ($user && !$user->trashed()) {
+            throw new InvalidArgumentException('The email provided already exists for a preview user.');
+        }
+
+        if (!$user) {
+            $user = User::create($params);
+        }
+
+        if ($user->trashed()) {
+            $user->restore();
+        }
+
+        $user->generateKey();
+        return $this->displayUser($user);
+    }
+
+    protected function deleteUser()
+    {
+        $user = $this->getUser();
+        $user->delete();
+        $this->info(sprintf('The preview user with email "%s" as been deleted.', $user->email));
+    }
+
+    protected function generateUserSecret()
+    {
+        $user = $this->getUser()->generateKey();
+        $this->displayUser($user);
+    }
+
+    protected function getUsers()
+    {
+        $users = User::all();
+        if ($users->isEmpty()) {
+            throw new InvalidArgumentException('Your application doesn\'t have any preview users.');
+        }
+        $this->displayUsers($users);
     }
 }

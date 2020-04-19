@@ -13,9 +13,12 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function boot()
     {
+        Route::middlewareGroup('preview', config('preview.middleware', []));
+
         $this->registerRoutes();
         $this->registerMigrations();
         $this->registerPublishing();
+
         $this->loadViewsFrom(
             __DIR__.'/../resources/views', 'preview'
         );
