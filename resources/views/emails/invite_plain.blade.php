@@ -1,3 +1,7 @@
-{{ $email }}
+You have been invited to preview {{ $website }}.
 
-{{ $secret_key }}
+Use the following email and secret key at {{ $url }}?email={{ $email }}&secret_key={{ $secret_key }}:
+
+Email: {{ $email }}
+
+Secret key: {{ $secret_key }}

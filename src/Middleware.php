@@ -28,6 +28,13 @@ class Middleware
             $user->save();
             return $next($request);
         }
-        return redirect(route('bhe.preview', ['return' => $path]));
+        $params = ['return' => $path];
+        if ($request->has('email')) {
+            $params['email'] = $request->get('email');
+        }
+        if ($request->has('secret_key')) {
+            $params['secret_key'] = $request->get('secret_key');
+        }
+        return redirect(route('bhe.preview', $params));
     }
 }

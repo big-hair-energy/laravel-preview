@@ -143,9 +143,9 @@ body {
         </div>
     @endif
     <label for="email" class="sr-only">Email address</label>
-    <input type="email" name="email" id="email" class="form-control" placeholder="Email address" value="{{ old('email') }}" required autofocus>
+    <input type="email" name="email" id="email" class="form-control" placeholder="Email address" value="{{ old('email') ? old('email') : $email }}" required autofocus>
     <label for="secret_key" class="sr-only">Secret Key</label>
-    <input type="text" name="secret_key" id="secret_key" class="form-control" placeholder="Secret Key" value="{{ old('secret_key') }}" required>
+    <input type="password" name="secret_key" id="secret_key" class="form-control" placeholder="Secret Key" value="{{ old('secret_key') ? old('secret_key') : $secret_key }}" required>
     <button class="btn btn-lg btn-primary btn-block" type="submit">Authenticate</button>
 </form>
 </body>

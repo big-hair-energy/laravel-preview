@@ -14,6 +14,8 @@ class PreviewInvitation extends Mailable
 
     public $email;
     public $secret_key;
+    public $website;
+    public $url;
 
     /**
      * Create a new message instance.
@@ -24,6 +26,8 @@ class PreviewInvitation extends Mailable
     {
         $this->email = $email;
         $this->secret_key = $secretKey;
+        $this->website = config('app.name');
+        $this->url = url('/');
     }
 
     /**

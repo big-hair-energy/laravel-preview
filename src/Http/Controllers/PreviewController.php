@@ -11,7 +11,10 @@ class PreviewController extends Controller
 {
     public function index(Request $request)
     {
-        return view('preview::layout', []);
+        return view('preview::layout', [
+            'email' => $request->get('email'),
+            'secret_key' => $request->get('secret_key'),
+        ]);
     }
 
     public function authenticate(PreviewRequest $request)
