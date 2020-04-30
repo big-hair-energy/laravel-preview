@@ -20,7 +20,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->registerPublishing();
 
         $this->loadViewsFrom(
-            __DIR__.'/../resources/views', 'preview'
+            __DIR__.'/../resources/views',
+            'preview',
         );
     }
 
