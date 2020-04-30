@@ -61,7 +61,7 @@ class InviteCommand extends Command
 
         // Send an email to the user
         try {
-            Mail::mailer(config('preview.mail.default'))->to($user->email)->send(new PreviewInvitation($user->email, $user->secret_key));
+            Mail::mailer(config('preview.mailer'))->to($user->email)->send(new PreviewInvitation($user->email, $user->secret_key));
             $this->totalSent++;
         } catch (Throwable $th) {
             //throw $th;
