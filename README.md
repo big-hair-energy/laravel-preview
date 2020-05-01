@@ -1,5 +1,7 @@
 # Laravel Preview
 
+![Unit Test](https://github.com/big-hair-energy/laravel-preview/workflows/Unit%20Test/badge.svg)
+
 Middleware that requires a secret key to view a Laravel site.
 
 ## Installation
