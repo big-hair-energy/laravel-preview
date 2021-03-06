@@ -1,6 +1,6 @@
 {
     "name": "big-hair-energy/laravel-preview",
-    "version": "v0.0.1",
+    "version": "v1.0.0",
     "description": "Laravel middleware for website access during a preview mode.",
     "license": "MIT",
     "authors": [
@@ -14,7 +14,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "^7.2.5"
+        "php": "^7.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.2"
